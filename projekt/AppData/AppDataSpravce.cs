@@ -11,6 +11,8 @@ public class AppDataSpravce
 {
     private readonly string slozkaAplikace;
     private readonly string souborRezervaci;
+    private readonly string souborUzivatelu;
+    private readonly string souborZdroju;
     //proměne, jako cesty
 
     public AppDataSpravce() //konstrukotr
@@ -20,6 +22,8 @@ public class AppDataSpravce
 
         slozkaAplikace = Path.Combine(appData, "RezervacniSystem");
         souborRezervaci = Path.Combine(slozkaAplikace, "rezervace.txt");
+        souborUzivatelu = Path.Combine(slozkaAplikace, "uzivatele.txt");
+        souborZdroju = Path.Combine(slozkaAplikace, "zdroje.txt");
 
         Directory.CreateDirectory(slozkaAplikace);
         // vytvari tu slozku zda jeste neni
@@ -116,6 +120,81 @@ public class AppDataSpravce
     {
         return slozkaAplikace;
     }                                  // vraci cesty
+    
+    public void UlozUzivatele(List<Uzivatele> uzivatele)
+    {
+        List<string> radky = new List<string>();
+        foreach (Uzivatele jedenUzivatel in uzivatele)
+        {
+            string radek =
+                jedenUzivatel.Id + "|" +
+                OsetriText(jedenUzivatel.Jmeno);
+            radky.Add(radek);
+        }
+        File.WriteAllLines(souborUzivatelu, radky);
+    }
+    public List<Uzivatele> NactiUzivatele()
+    {
+        List<Uzivatele> uzivatele = new List<Uzivatele>();
+        if (!File.Exists(souborUzivatelu))
+        {
+            return uzivatele;
+        }
+        string[] radky = File.ReadAllLines(souborUzivatelu);
+        foreach (string radek in radky)
+        {
+            string[] casti = radek.Split('|');
+            if (casti.Length < 2)
+            {
+                continue;
+            }
+            Uzivatele jedenUzivatel = new Uzivatele
+            {
+                Id = int.Parse(casti[0]),
+                Jmeno = casti[1]
+            };
+            uzivatele.Add(jedenUzivatel);
+        }
+        return uzivatele;
+    }
+    public void UlozZdroje(List<Zdroj> zdroje)
+    {
+        List<string> radky = new List<string>();
+        foreach (Zdroj jedenZdroj in zdroje)
+        {
+            string radek =
+                jedenZdroj.Id + "|" +
+                OsetriText(jedenZdroj.Nazev) + "|" +
+                OsetriText(jedenZdroj.Typ);
+            radky.Add(radek);
+        }
+        File.WriteAllLines(souborZdroju, radky);
+    }
+    public List<Zdroj> NactiZdroje()
+    {
+        List<Zdroj> zdroje = new List<Zdroj>();
+        if (!File.Exists(souborZdroju))
+        {
+            return zdroje;
+        }
+        string[] radky = File.ReadAllLines(souborZdroju);
+        foreach (string radek in radky)
+        {
+            string[] casti = radek.Split('|');
+            if (casti.Length < 3)
+            {
+                continue;
+            }
+            Zdroj jedenZdroj = new Zdroj
+            {
+                Id = int.Parse(casti[0]),
+                Nazev = casti[1],
+                Typ = casti[2]
+            };
+            zdroje.Add(jedenZdroj);
+        }
+        return zdroje;
+    }
 
     private string OsetriText(string text)
     {
