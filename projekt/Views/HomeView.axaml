@@ -1,9 +1,44 @@
-﻿<Window xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-        x:Class="projekt.Views.HomeView"
-        Title="HomeView">
-    Welcome to Avalonia!
-</Window>
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="projekt.Views.HomeView">
+
+    <ScrollViewer>
+        <StackPanel Margin="20" Spacing="25">
+            
+            <StackPanel>
+                <TextBlock Text="Rezervační systém" FontSize="28" FontWeight="Bold"/>
+                <TextBlock Text="Spravujte své zdroje efektivně a přehledně." FontSize="14" Foreground="Gray"/>
+            </StackPanel>
+
+            <WrapPanel>
+                <Border Background="{DynamicResource SystemControlBackgroundAltHighBrush}" 
+                        BorderBrush="Gray" BorderThickness="1" 
+                        CornerRadius="12" Padding="20" Margin="0,0,20,20" Width="300">
+                    <StackPanel Spacing="10">
+                        <TextBlock Text="Správa rezervací" FontWeight="Bold" FontSize="18"/>
+                        <TextBlock Text="Vytvářejte, editujte a rušte rezervace v reálném čase. Systém automaticky hlídá kolize termínů." TextWrapping="Wrap"/>
+                    </StackPanel>
+                </Border>
+
+                <Border Background="{DynamicResource SystemControlBackgroundAltHighBrush}" 
+                        BorderBrush="Gray" BorderThickness="1" 
+                        CornerRadius="12" Padding="20" Margin="0,0,20,20" Width="300">
+                    <StackPanel Spacing="10">
+                        <TextBlock Text="Přehled a export" FontWeight="Bold" FontSize="18"/>
+                        <TextBlock Text="Sledujte vytíženost učeben a sportovišť. Data můžete kdykoliv exportovat pro další zpracování." TextWrapping="Wrap"/>
+                    </StackPanel>
+                </Border>
+
+                <Border Background="{DynamicResource SystemControlBackgroundAltHighBrush}" 
+                        BorderBrush="Gray" BorderThickness="1" 
+                        CornerRadius="12" Padding="20" Margin="0,0,20,20" Width="300">
+                    <StackPanel Spacing="10">
+                        <TextBlock Text="Uživatelská přizpůsobení" FontWeight="Bold" FontSize="18"/>
+                        <TextBlock Text="Nastavte si aplikaci podle svých preferencí, včetně podpory tmavého režimu." TextWrapping="Wrap"/>
+                    </StackPanel>
+                </Border>
+            </WrapPanel>
+            
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

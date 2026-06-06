@@ -1,9 +1,73 @@
-﻿<Window xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-        x:Class="projekt.Views.PrehledRezervaciView"
-        Title="PrehledRezervaciView">
-    Welcome to Avalonia!
-</Window>
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="850" d:DesignHeight="550"
+             x:Class="projekt.Views.PrehledRezervaciView"
+             x:CompileBindings="False">
+
+    <Grid ColumnDefinitions="*, 320" Margin="20">
+
+        <StackPanel Grid.Column="0" Margin="0,0,20,0" Spacing="10">
+            <TextBlock Text="Přehled rezervací" FontSize="26" FontWeight="Bold" />
+
+            <Grid ColumnDefinitions="90, 130, *, 100" Background="{DynamicResource SystemControlBackgroundBaseLowBrush}">
+                <TextBlock Grid.Column="0" Text="Datum" FontWeight="Bold" Padding="10,5"/>
+                <TextBlock Grid.Column="1" Text="Místo" FontWeight="Bold" Padding="5"/>
+                <TextBlock Grid.Column="2" Text="Uživatel" FontWeight="Bold" Padding="5"/>
+                <TextBlock Grid.Column="3" Text="Čas" FontWeight="Bold" Padding="5"/>
+            </Grid>
+
+            <ListBox Name="RezervaceListBox" Height="350" BorderBrush="Gray" BorderThickness="1" CornerRadius="8" Background="{DynamicResource SystemControlBackgroundAltHighBrush}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid ColumnDefinitions="90, 130, *, 100" Margin="5">
+                            <TextBlock Grid.Column="0" Text="{Binding Datum, StringFormat=\{0:dd.MM.yyyy\}}"/>
+                            <TextBlock Grid.Column="1" Text="{Binding NazevZdroje}"/>
+                            <TextBlock Grid.Column="2" Text="{Binding JmenoUzivatele}"/>
+                            <StackPanel Grid.Column="3" Orientation="Horizontal">
+                                <TextBlock Text="{Binding CasOd, StringFormat=\{0:hh\\:mm\}}"/>
+                                <TextBlock Text="-"/>
+                                <TextBlock Text="{Binding CasDo, StringFormat=\{0:hh\\:mm\}}"/>
+                            </StackPanel>
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+
+            <StackPanel Orientation="Horizontal" Spacing="10">
+                <Button Content="Exportovat do TXT" Click="ExportTlacitko_Click" Width="150" HorizontalContentAlignment="Center" BorderBrush="Gray" BorderThickness="1" CornerRadius="6"/>
+                <Button Content="Smazat rezervaci" Click="SmazatTlacitko_Click" Width="140" HorizontalContentAlignment="Center" Background="#ffcccc" Foreground="Black" BorderBrush="Gray" BorderThickness="1" CornerRadius="6"/>
+            </StackPanel>
+        </StackPanel>
+
+        <StackPanel Grid.Column="1" Spacing="15">
+            <TextBlock Text="Filtrování" FontSize="20" FontWeight="Bold"/>
+
+            <StackPanel Spacing="5">
+                <TextBlock Text="Vyberte datum:" FontWeight="Bold"/>
+                <Border BorderBrush="Gray" BorderThickness="1" CornerRadius="12" Padding="5" HorizontalAlignment="Left" Background="{DynamicResource SystemControlBackgroundAltHighBrush}">
+                    <Calendar Name="FiltrKalendar" BorderThickness="0" Background="Transparent"/>
+                </Border>
+            </StackPanel>
+
+            <StackPanel Spacing="5">
+                <TextBlock Text="Místo / Typ vybavení:" FontWeight="Bold"/>
+                <ComboBox Name="FiltrZdrojComboBox" SelectedIndex="0" Width="240" CornerRadius="6">
+                    <ComboBoxItem>Zobrazit vše</ComboBoxItem>
+                    <ComboBoxItem>Tělocvična</ComboBoxItem>
+                    <ComboBoxItem>Učebna A</ComboBoxItem>
+                    <ComboBoxItem>Učebna B</ComboBoxItem>
+                    <ComboBoxItem>Projektor</ComboBoxItem>
+                </ComboBox>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Spacing="10" Margin="0,10,0,0">
+                <Button Content="Použít filtry" Click="PouzitFiltry_Click" Width="115" HorizontalContentAlignment="Center" Background="#c3e6cb" BorderBrush="Gray" BorderThickness="1" CornerRadius="6" Foreground="Black"/>
+                <Button Content="Zrušit" Click="ZrusitFiltry_Click" Width="115" HorizontalContentAlignment="Center" BorderBrush="Gray" BorderThickness="1" CornerRadius="6"/>
+            </StackPanel>
+            
+        </StackPanel>
+
+    </Grid>
+</UserControl>

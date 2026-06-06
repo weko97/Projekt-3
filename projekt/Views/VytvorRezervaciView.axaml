@@ -1,9 +1,55 @@
-﻿<Window xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-        x:Class="projekt.Views.VytvorRezervaciView"
-        Title="VytvorRezervaci">
-    Welcome to Avalonia!
-</Window>
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="projekt.Views.VytvoritRezervaciView">
+
+    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Width="400" Spacing="20">
+        <TextBlock Text="Nová rezervace" FontSize="28" FontWeight="Bold"/>
+        
+        <Border Background="{DynamicResource SystemControlBackgroundAltHighBrush}" 
+                BorderBrush="Gray" BorderThickness="1" CornerRadius="16" Padding="30">
+            <StackPanel Spacing="15">
+                <StackPanel Spacing="5">
+                    <TextBlock Text="Jméno uživatele" FontWeight="SemiBold"/>
+                    <TextBox Name="JmenoTextBox" Height="35" CornerRadius="6" Watermark="Jan Novák"/>
+                </StackPanel>
+
+                <StackPanel Spacing="5">
+                    <TextBlock Text="Zdroj / Místnost" FontWeight="SemiBold"/>
+                    <ComboBox Name="ZdrojComboBox" HorizontalAlignment="Stretch" Height="35" CornerRadius="6" SelectedIndex="0">
+                        <ComboBoxItem>Tělocvična</ComboBoxItem>
+                        <ComboBoxItem>Učebna A</ComboBoxItem>
+                        <ComboBoxItem>Učebna B</ComboBoxItem>
+                        <ComboBoxItem>Projektor</ComboBoxItem>
+                    </ComboBox>
+                </StackPanel>
+
+                <StackPanel Spacing="5">
+                    <TextBlock Text="Datum (DD.MM.RRRR)" FontWeight="SemiBold"/>
+                    <TextBox Name="DatumTextBox" Height="35" CornerRadius="6" MaxLength="10" 
+                             Watermark="06.06.2026" TextChanged="Datum_TextChanged"/>
+                </StackPanel>
+
+                <Grid ColumnDefinitions="*, 20, *" Margin="0,5,0,0">
+                    <StackPanel Grid.Column="0" Spacing="5">
+                        <TextBlock Text="Od (HH:mm)" FontWeight="SemiBold"/>
+                        <TextBox Name="CasOdTextBox" Height="35" CornerRadius="6" MaxLength="5" 
+                                 Watermark="14:00" TextChanged="Cas_TextChanged"/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="2" Spacing="5">
+                        <TextBlock Text="Do (HH:mm)" FontWeight="SemiBold"/>
+                        <TextBox Name="CasDoTextBox" Height="35" CornerRadius="6" MaxLength="5" 
+                                 Watermark="16:00" TextChanged="Cas_TextChanged"/>
+                    </StackPanel>
+                </Grid>
+            </StackPanel>
+        </Border>
+
+        <Button Name="PotvrditButton" Content="Vytvořit rezervaci" Click="VytvoritTlacitko_Click" 
+                HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
+                FontSize="16" FontWeight="Bold" Padding="15" CornerRadius="8"
+                Background="#007acc" Foreground="White"/>
+
+        <TextBlock Name="ChybovaHlaska" Foreground="Red" HorizontalAlignment="Center" 
+                   Margin="0,10,0,0" TextWrapping="Wrap" FontWeight="Bold"/>
+    </StackPanel>
+</UserControl>

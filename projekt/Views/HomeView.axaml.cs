@@ -1,13 +1,12 @@
-﻿using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
+﻿using Avalonia.Controls;
 
-namespace projekt.Views;
-
-public partial class HomeView : Window
+namespace projekt.Views
 {
-    public HomeView()
+    public partial class HomeView : UserControl // <-- TADY MUSÍ BÝT UserControl
     {
-        InitializeComponent();
+        public HomeView()
+        {
+            InitializeComponent();
+        }
     }
 }

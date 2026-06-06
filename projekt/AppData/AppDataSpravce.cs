@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using projekt.Models;
-// pouzivam z importu toto Environment ; DateTime ; TimeSpan ; prace s listem ; CultureInfo.InvariantCulture (pro datum); Path ; Directory a File (pro praci se soubory)
 
 namespace projekt.AppData;
 
@@ -13,11 +12,9 @@ public class AppDataSpravce
     private readonly string souborRezervaci;
     private readonly string souborUzivatelu;
     private readonly string souborZdroju;
-    //proměne, jako cesty
 
-    public AppDataSpravce() //konstrukotr
+    public AppDataSpravce()
     {
-        //dalsi cesty
         string appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
 
         slozkaAplikace = Path.Combine(appData, "RezervacniSystem");
@@ -26,15 +23,13 @@ public class AppDataSpravce
         souborZdroju = Path.Combine(slozkaAplikace, "zdroje.txt");
 
         Directory.CreateDirectory(slozkaAplikace);
-        // vytvari tu slozku zda jeste neni
     }
 
-    public void UlozRezervace(List<Rezervace> rezervace) // uklada seznam rezervaci do txt souboru
+    public void UlozRezervace(List<Rezervace> rezervace)
     {
         List<string> radky = new List<string>();
-        
 
-        foreach (Rezervace jednaRezervace in rezervace) //projede kazdou rezervaci 
+        foreach (Rezervace jednaRezervace in rezervace)
         {
             string radek =
                 jednaRezervace.Id + "|" +
@@ -45,18 +40,17 @@ public class AppDataSpravce
                 jednaRezervace.CasOd.ToString(@"hh\:mm") + "|" +
                 jednaRezervace.CasDo.ToString(@"hh\:mm") + "|" +
                 OsetriText(jednaRezervace.Poznamka);
-                                                               //prevadime na txt !
             radky.Add(radek);
         }
 
         File.WriteAllLines(souborRezervaci, radky);
     }
 
-    public List<Rezervace> NactiRezervace()  // vezme txt a a vytvori z nej seznam objektu Rezervace
+    public List<Rezervace> NactiRezervace()
     {
         List<Rezervace> rezervace = new List<Rezervace>();
 
-        if (!File.Exists(souborRezervaci)) // existuje txt? 
+        if (!File.Exists(souborRezervaci))
         {
             return rezervace;
         }
@@ -70,7 +64,7 @@ public class AppDataSpravce
             if (casti.Length < 8)
             {
                 continue;
-            }      // kontroluje jestli objekt ma vsechny atributy 
+            }
 
             Rezervace jednaRezervace = new Rezervace
             {
@@ -82,26 +76,33 @@ public class AppDataSpravce
                 CasOd = TimeSpan.Parse(casti[5]),
                 CasDo = TimeSpan.Parse(casti[6]),
                 Poznamka = casti[7]
-                                                  // prevadime txt zas na objekty 
             };
 
-            rezervace.Add(jednaRezervace); // dame rezervaci do seznamu 
+            rezervace.Add(jednaRezervace);
         }
 
-        return rezervace; 
+        return rezervace;
     }
 
-    public void ExportujRezervace(List<Rezervace> rezervace)    // vytvarime dalsi txt, ktery bude hezci nez ten s kterym pracuje program 
+    public void ExportujRezervace(List<Rezervace> rezervace, string vlastniCesta = null)
     {
-        string souborExportu = Path.Combine(slozkaAplikace, "export_rezervaci.txt"); 
+        string cilovaSlozka = string.IsNullOrWhiteSpace(vlastniCesta) ? slozkaAplikace : vlastniCesta;
 
-        List<string> radky = new List<string>(); 
+        if (!Directory.Exists(cilovaSlozka))
+        {
+            Directory.CreateDirectory(cilovaSlozka);
+        }
+
+        string souborExportu = Path.Combine(cilovaSlozka, "export_rezervaci.txt");
+
+        List<string> radky = new List<string>();
 
         radky.Add("EXPORT REZERVACI");
         radky.Add("================");
-        radky.Add("");                    // visual things
+        radky.Add($"Vytvořeno: {DateTime.Now:dd.MM.yyyy HH:mm}");
+        radky.Add("");
 
-        foreach (Rezervace jednaRezervace in rezervace) // prochazi rezervace 
+        foreach (Rezervace jednaRezervace in rezervace)
         {
             radky.Add("ID: " + jednaRezervace.Id);
             radky.Add("Uživatel: " + jednaRezervace.JmenoUzivatele);
@@ -109,18 +110,18 @@ public class AppDataSpravce
             radky.Add("Typ: " + jednaRezervace.TypZdroje);
             radky.Add("Datum: " + jednaRezervace.Datum.ToString("dd.MM.yyyy"));
             radky.Add("Čas: " + jednaRezervace.CasOd.ToString(@"hh\:mm") + " - " + jednaRezervace.CasDo.ToString(@"hh\:mm"));
-            radky.Add("Poznámka: " + jednaRezervace.Poznamka);
+            //radky.Add("Poznámka: " + jednaRezervace.Poznamka);
             radky.Add("----------------");
         }
 
-        File.WriteAllLines(souborExportu, radky); // zapise export do hezciho txt 
+        File.WriteAllLines(souborExportu, radky);
     }
 
     public string ZiskejCestuKeSlozce()
     {
         return slozkaAplikace;
-    }                                  // vraci cesty
-    
+    }
+
     public void UlozUzivatele(List<Uzivatele> uzivatele)
     {
         List<string> radky = new List<string>();
@@ -133,6 +134,7 @@ public class AppDataSpravce
         }
         File.WriteAllLines(souborUzivatelu, radky);
     }
+
     public List<Uzivatele> NactiUzivatele()
     {
         List<Uzivatele> uzivatele = new List<Uzivatele>();
@@ -157,6 +159,7 @@ public class AppDataSpravce
         }
         return uzivatele;
     }
+
     public void UlozZdroje(List<Zdroj> zdroje)
     {
         List<string> radky = new List<string>();
@@ -165,11 +168,12 @@ public class AppDataSpravce
             string radek =
                 jedenZdroj.Id + "|" +
                 OsetriText(jedenZdroj.Nazev) + "|" +
-                OsetriText(jedenZdroj.Typ);
+                OsetriText(jedenZdroj.Typ); // TADY BYLA TA CHYBA - OPRAVENO NA jedenZdroj
             radky.Add(radek);
         }
         File.WriteAllLines(souborZdroju, radky);
     }
+
     public List<Zdroj> NactiZdroje()
     {
         List<Zdroj> zdroje = new List<Zdroj>();
@@ -196,10 +200,8 @@ public class AppDataSpravce
         return zdroje;
     }
 
-    private string OsetriText(string text)
+    public string OsetriText(string text)
     {
-        
-        // (ochrana) v txt nemuzem mit tento znak | bo to je oddělovač 
-        return text.Replace("|", " ");
+        return text?.Replace("|", " ") ?? "";
     }
 }

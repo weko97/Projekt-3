@@ -1,9 +1,37 @@
-﻿<Window xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-        x:Class="projekt.Views.NastaveniView"
-        Title="NastaveniView">
-    Welcome to Avalonia!
-</Window>
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="500"
+             x:Class="projekt.Views.NastaveniView">
+
+    <ScrollViewer>
+        <StackPanel Margin="20" Spacing="15">
+            
+            <TextBlock Text="Nastavení systému" FontSize="26" FontWeight="Bold" Margin="0,0,0,10"/>
+
+            <StackPanel Spacing="5">
+                <TextBlock Text="Cesta pro uložení rezervací (TXT - export_rezervaci.txt):" FontWeight="Bold"/>
+                <TextBox Name="CestaTextBox" Text="C:\RezervacniSystem\" Width="400" HorizontalAlignment="Left" BorderBrush="Gray"/>
+                <TextBlock Text="Pokud soubor neexistuje, systém ho vytvoří automaticky." FontSize="12" Foreground="Gray"/>
+            </StackPanel>
+
+            <StackPanel Spacing="5" Margin="0,10,0,0">
+                <TextBlock Text="Uživatelské rozhraní a funkce:" FontWeight="Bold"/>
+                <CheckBox Name="BarvyCheckBox" Content="Povolit barevné označení obsazených termínů" IsChecked="True"/>
+                <CheckBox Name="KolizeCheckBox" Content="Zobrazovat upozornění při kolizi termínů" IsChecked="True"/>
+                
+                <CheckBox Name="DarkModeCheckBox" 
+                          Content="Povolit tmavý režim (Dark mode)" 
+                          IsChecked="False"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Spacing="15" Margin="0,20,0,0">
+                <Button Content="Uložit nastavení" Click="UlozitTlacitko_Click" Width="130" HorizontalContentAlignment="Center" BorderBrush="Gray" BorderThickness="1"/>
+                <Button Content="Zrušit" Click="ZrusitTlacitko_Click" Width="100" HorizontalContentAlignment="Center" BorderBrush="Gray" BorderThickness="1"/>
+            </StackPanel>
+
+        </StackPanel>
+    </ScrollViewer>
+    
+</UserControl>

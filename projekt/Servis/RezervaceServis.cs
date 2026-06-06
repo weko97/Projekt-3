@@ -3,28 +3,30 @@ using System.Collections.Generic;
 using System.Linq;
 using projekt.AppData;
 using projekt.Models;
-//
 
 namespace projekt.Servis;
 
 public class RezervaceServis 
 {
+    private static RezervaceServis _instance = new RezervaceServis();
+    public static RezervaceServis Instance => _instance;
+
     private List<Rezervace> rezervace = new List<Rezervace>();
     private AppDataSpravce appDataSpravce = new AppDataSpravce();
 
-    public RezervaceServis()   // konstruktor 
+    private RezervaceServis()   
     {
         rezervace = appDataSpravce.NactiRezervace();
     }
 
-    public List<Rezervace> ZiskejVsechnyRezervace() // vraci seznam rezervaci 
+    public List<Rezervace> ZiskejVsechnyRezervace() 
     {
         return rezervace;
     }
 
-    public string PridejRezervaci(Rezervace novaRezervace) // pridava nove rezervace
+    public string PridejRezervaci(Rezervace novaRezervace) 
     {
-        string chyba = ZkontrolujRezervaci(novaRezervace); // validace vstupu do rezervaci
+        string chyba = ZkontrolujRezervaci(novaRezervace);
 
         if (chyba != "")
         {
@@ -37,25 +39,25 @@ public class RezervaceServis
         }
 
         novaRezervace.Id = ZiskejNoveId(); 
-        rezervace.Add(novaRezervace); // prida rezervaci do seznamu 
+        rezervace.Add(novaRezervace);
 
         appDataSpravce.UlozRezervace(rezervace);
 
-        return ""; // zda vrati prazdny string, all good
+        return "";
     }
 
-    public void SmazRezervaci(int id) // smaze vybranou rezervaci, podle ID
+    public void SmazRezervaci(int id) 
     {
-        Rezervace? nalezenaRezervace = rezervace.FirstOrDefault(r => r.Id == id); // projde seznam
+        Rezervace? nalezenaRezervace = rezervace.FirstOrDefault(r => r.Id == id);
 
-        if (nalezenaRezervace != null) // kontorla zda ID neextistuje 
+        if (nalezenaRezervace != null)
         {
             rezervace.Remove(nalezenaRezervace);
-            appDataSpravce.UlozRezervace(rezervace); // zavola ukladani do txt at je vse stejne 
+            appDataSpravce.UlozRezervace(rezervace);
         }
     }
 
-    public string ZkontrolujRezervaci(Rezervace novaRezervace) // základní validace vstupů 
+    public string ZkontrolujRezervaci(Rezervace novaRezervace)
     {
         if (novaRezervace.JmenoUzivatele == "")
         {
@@ -77,52 +79,59 @@ public class RezervaceServis
             return "Čas začátku musí být dřív než čas konce.";
         }
 
+        DateTime zacatekRezervace = novaRezervace.Datum.Date + novaRezervace.CasOd;
+        
+        if (zacatekRezervace < DateTime.Now)
+        {
+            return "Nelze vytvořit rezervaci v minulosti.";
+        }
+
         return "";
     }
 
-    public bool MaKolizi(Rezervace novaRezervace) // kontroluje zda 
+    public bool MaKolizi(Rezervace novaRezervace)
     {
         return rezervace.Any(staraRezervace =>
-            staraRezervace.Id != novaRezervace.Id && // kontrola aby jsme nebrali jako kolizi stejnou rezervaci 
-            staraRezervace.NazevZdroje == novaRezervace.NazevZdroje && // kontrola zda se jedna o jinou mistnost/predmet nez v vybrane rezervaci
-            staraRezervace.Datum.Date == novaRezervace.Datum.Date && // kontroluje zda jsou v jiny den i kdyz se čas překrývá 
+            staraRezervace.Id != novaRezervace.Id &&
+            staraRezervace.NazevZdroje == novaRezervace.NazevZdroje &&
+            staraRezervace.Datum.Date == novaRezervace.Datum.Date &&
             novaRezervace.CasOd < staraRezervace.CasDo &&
-            novaRezervace.CasDo > staraRezervace.CasOd    // hlavni kontorla, zda se casi prekrivaji 
+            novaRezervace.CasDo > staraRezervace.CasOd
         );
     }
 
-    public List<Rezervace> FiltrujPodleData(DateTime datum) // vraci rezervaci podle dne
+    public List<Rezervace> FiltrujPodleData(DateTime datum)
     {
         return rezervace
             .Where(r => r.Datum.Date == datum.Date)
             .ToList();
     }
 
-    public List<Rezervace> FiltrujPodleZdroje(string nazevZdroje) // vraci rezervaci podle typu rezervace (napr. ucebna, vybavení, sportoviště atd)
+    public List<Rezervace> FiltrujPodleZdroje(string nazevZdroje)
     {
         return rezervace
             .Where(r => r.NazevZdroje == nazevZdroje)
             .ToList();
     }
 
-    public List<Rezervace> FiltrujPodleUzivatele(string jmenoUzivatele) // vraci rezervaci podle uzivatele ktery ji udelal 
+    public List<Rezervace> FiltrujPodleUzivatele(string jmenoUzivatele)
     {
         return rezervace
             .Where(r => r.JmenoUzivatele == jmenoUzivatele)
             .ToList();
     }
 
-    public void ExportujRezervace() // předává aktualní seznam do AppData
+    public void ExportujRezervace(string vlastniCesta = null)
     {
-        appDataSpravce.ExportujRezervace(rezervace);
+        appDataSpravce.ExportujRezervace(rezervace, vlastniCesta);
     }
 
-    public string ZiskejCestuKeSlozceAppData() // vrací cestu ke složce AppData
+    public string ZiskejCestuKeSlozceAppData()
     {
         return appDataSpravce.ZiskejCestuKeSlozce();
     }
 
-    private int ZiskejNoveId() // vytvari nove ID pro kazdou rezervaci 
+    private int ZiskejNoveId()
     {
         if (rezervace.Count == 0)
         {

@@ -1,9 +1,20 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="projekt.MainWindow"
-        Title="projekt">
-    Welcome to Avalonia!
+        Title="Rezervační Systém" Width="1000" Height="600">
+
+    <Grid ColumnDefinitions="200, *">
+        <Border Grid.Column="0" BorderThickness="0,0,1,0" BorderBrush="Gray">
+            <StackPanel Spacing="10" Margin="10,20,10,0" HorizontalAlignment="Center">
+                <TextBlock Text="Navigace" HorizontalAlignment="Center" FontWeight="Bold" FontSize="18" Margin="0,0,0,10"/>
+                
+                <Button Content="Domů" Width="150" HorizontalContentAlignment="Center" Click="OnHome_Click"/>
+                <Button Content="Vytvořit rezervaci" Width="150" HorizontalContentAlignment="Center" Click="OnVytvorRezervaci_Click"/>
+                <Button Content="Přehled rezervací" Width="150" HorizontalContentAlignment="Center" Click="OnPrehledRezervaci_Click"/>
+                <Button Content="Nastavení" Width="150" HorizontalContentAlignment="Center" Click="OnNastaveni_Click"/>
+            </StackPanel>
+        </Border>
+
+        <ContentControl Name="MainContent" Grid.Column="1" Margin="20"/>
+    </Grid>
 </Window>
