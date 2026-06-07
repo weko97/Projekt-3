@@ -1,19 +1,24 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
-using projekt.Views; // Ujisti se, že tento namespace odpovídá tvému projektu!
+using projekt.Views; 
 
 namespace projekt
 {
+    // tohle je hlavni okno cele aplikace, do ktereho se nacitaji jednotlive podstranky
     public partial class MainWindow : Window
     {
         public MainWindow()
         {
             InitializeComponent();
-            // Při startu aplikace zobrazí HomeView
+            
+            // hned pri spusteni programu se do hlavni casti okna nacte domovska stranka
             MainContent.Content = new HomeView();
         }
 
+        // nasledujici metody funguji jako jednoduche navigacni menu
+        // po kliknuti na prislusne tlacitko zmeni obsah (Content) v hlavnim okne na jinou obrazovku
+        
         private void OnHome_Click(object sender, RoutedEventArgs e)
         {
             MainContent.Content = new HomeView();
