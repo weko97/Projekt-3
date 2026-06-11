@@ -1,3 +1,2 @@
 # Projekt-3
-piko projekt
-wqdqdwdsaadwaasda
+Projekt je okomentovan v programu
